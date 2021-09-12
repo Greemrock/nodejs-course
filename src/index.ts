@@ -1,18 +1,21 @@
 import express from 'express';
+import { createValidator } from 'express-joi-validation';
 import { HttpStatusCode } from './statusCode';
 import * as UserService from './user/user.service';
 import { BaseUser } from './user/user.type';
+import { bodyQuerySchema } from './joi';
 
 const app = express();
 app.use(express.json());
 const port = 3000;
+const validator = createValidator();
 
 /* CRUD operations for Users */
 app.get('/users/:id', async (req, res) => {
   const id = req.params.id;
   try {
     const user = await UserService.getUser(id);
-    console.log('Get users:', user);
+    console.log('Get user by id:', user);
     if (user) {
       return res.status(HttpStatusCode.OK).send(user);
     }
@@ -34,7 +37,7 @@ app.get('/users', async (req, res) => {
   }
   try {
     const user = await UserService.getAutoSuggestUsers(loginSubstring, limit);
-    console.log('Get users:', user);
+    console.log('Get all users:', user);
     if (user) {
       return res.status(HttpStatusCode.OK).send(user);
     }
@@ -44,7 +47,7 @@ app.get('/users', async (req, res) => {
   }
 });
 
-app.post('/users', async (req, res) => {
+app.post('/users', validator.body(bodyQuerySchema), async (req, res) => {
   const baseUser = req.body as BaseUser;
   try {
     const user = await UserService.createUser(baseUser);
@@ -55,7 +58,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-app.put('/users/:id', async (req, res) => {
+app.put('/users/:id', validator.body(bodyQuerySchema), async (req, res) => {
   const id = req.params.id;
   const baseUser = req.body as BaseUser;
   try {
