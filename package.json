@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node .",
-    "serve": "nodemon ./src/index.ts",
+    "start": "nodemon ./src/index.ts",
     "lint": "eslint . --ext .ts",
     "prepare": "husky install"
   },
