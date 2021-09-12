@@ -11,7 +11,7 @@ const port = 3000;
 app.get('/users/:id', async (req, res) => {
   const id = req.params.id;
   try {
-    const user = UserService.getUser(id);
+    const user = await UserService.getUser(id);
     console.log('Get users:', user);
     if (user) {
       return res.status(HttpStatusCode.OK).send(user);
@@ -67,7 +67,7 @@ app.put('/users/:id', async (req, res) => {
   }
 });
 
-app.patch('/users/:id', async (req, res) => {
+app.delete('/users/:id', async (req, res) => {
   const id = req.params.id;
   try {
     await UserService.deleteUser(id);
