@@ -25,7 +25,7 @@ export const createUser = async (user: BaseUser): Promise<User> => {
   return newUser;
 }
 
-export const updateUser = async (id: string, user: BaseUser): Promise<void> => { 
+export const updateUser = async (id: string, user: BaseUser): Promise<User> => { 
   const index = users.findIndex(elem => elem.id === id);
   if (index > 0 || index === 0) {
     users[index] = {
@@ -33,6 +33,7 @@ export const updateUser = async (id: string, user: BaseUser): Promise<void> => {
       ...user,
     }
   }
+  return users[index];
 }
 
 export const deleteUser = async (id: string): Promise<void> => { 
