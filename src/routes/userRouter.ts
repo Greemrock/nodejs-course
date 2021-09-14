@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import * as UserService from '../user/user.service';
-import { bodySchema } from '../joi';
+import { bodySchema } from '../schema';
 import { createValidator } from 'express-joi-validation';
-import { HttpStatusCode } from '../statusCode';
+import { HttpStatusCode } from '../error';
 import { BaseUser } from '../user/user.type';
 
 export const userRouter = Router();
