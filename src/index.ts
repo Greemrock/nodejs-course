@@ -3,6 +3,7 @@ import { userRouter } from "./routes/userRouter";
 
 const app = express();
 app.use(express.json());
+
 const port = 3000;
 
 app.use("/", userRouter);
