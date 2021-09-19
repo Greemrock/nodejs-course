@@ -1,17 +1,28 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
   "parserOptions": {
     "sourceType": "module"
   },
   "rules": {
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
-    "@typescript-eslint/default-param-last": ["error"]
+    "@typescript-eslint/default-param-last": ["error"],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "prettier/prettier": ["error"]
   },
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "jest": true
   }
 }

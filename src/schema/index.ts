@@ -1,1 +1,1 @@
-export * from './bodySchema';
+export * from "./bodySchema";

@@ -4,7 +4,7 @@ export interface BaseUser {
   age: number;
 }
 
-export interface User extends BaseUser{
+export interface User extends BaseUser {
   id: string;
   isDeleted: boolean;
 }
