@@ -8,17 +8,18 @@ import dbConfig from "./config/database";
 const app: Application = express();
 app.use(express.json());
 
-const PORT = 8000;
-
 app.use("/", userRouter);
 
-createConnection(dbConfig)
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log("Server is running on port", PORT);
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, async () => {
+  console.log(`Server started on port ${PORT}`);
+  createConnection(dbConfig)
+    .then(() => {
+      console.log("Connected to Postgres");
+    })
+    .catch(err => {
+      console.error(err);
+      throw new Error("Unable to connect to db");
     });
-  })
-  .catch(err => {
-    console.log("Unable to connect to db", err);
-    process.exit(1);
-  });
+});
