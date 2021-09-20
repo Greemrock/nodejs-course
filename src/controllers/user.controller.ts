@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserModelPayload } from "./../entity/user.entity";
-import * as userRepository from "../repositories/user.repository";
-import { HttpStatusCode } from "../error";
+import { UserModelPayload } from "../types";
+import * as userRepository from "../services";
+import { HttpStatusCode } from "../utils/error";
 
 export const getUserById = async (req: Request, res: Response) => {
   try {

@@ -3,7 +3,7 @@ import express, { Application } from "express";
 import { createConnection } from "typeorm";
 import cors from "cors";
 
-import { userRouter } from "./routes/user.router";
+import { userRouter } from "./routers";
 import dbConfig from "./config/database";
 
 const app: Application = express();
