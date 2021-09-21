@@ -7,8 +7,8 @@ export const userRouter = Router();
 const validator = createValidator();
 
 userRouter
-  .get("/:id", UserControllers.getUserById)
-  .get("/", UserControllers.getAutoSuggestUsers)
-  .post("/", validator.body(bodySchema), UserControllers.postUser)
-  .put("/:id", validator.body(bodySchema), UserControllers.putUser)
-  .delete("/:id", UserControllers.deleteUser);
+  .get("/:id", UserControllers.get)
+  .get("/", UserControllers.getAll)
+  .post("/", validator.body(bodySchema), UserControllers.create)
+  .put("/:id", validator.body(bodySchema), UserControllers.update)
+  .delete("/:id", UserControllers.remove);

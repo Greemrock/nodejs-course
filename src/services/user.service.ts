@@ -3,9 +3,14 @@ import { getRepository } from "typeorm";
 import { UserModel, UserModelPayload } from "../types/user.entity";
 import { User } from "../models";
 
-export const getUser = async (id: string): Promise<UserModel> => {
+export const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  return userRepository.findOne(id);
+  return userRepository.findOne({ id: id });
+};
+
+export const getUserByLogin = async (login: string): Promise<UserModel> => {
+  const userRepository = getRepository(User);
+  return userRepository.findOne({ login: login });
 };
 
 export const getAutoSuggestUsers = async (

@@ -3,10 +3,10 @@ import { UserModelPayload } from "../types";
 import * as userRepository from "../services";
 import { HttpStatusCode } from "../utils/error";
 
-export const getUserById = async (req: Request, res: Response) => {
+export const get = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const user = await userRepository.getUser(id);
+    const user = await userRepository.getUserById(id);
     if (!user) {
       return res.status(HttpStatusCode.NOT_FOUND).send("User not found");
     } else if (user.isDeleted === true) {
@@ -20,7 +20,7 @@ export const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-export const getAutoSuggestUsers = async (req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   const { loginSubstring, limit = "10" } = req.query;
   try {
     const user = await userRepository.getAutoSuggestUsers(
@@ -36,9 +36,15 @@ export const getAutoSuggestUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const postUser = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
     const baseUser = req.body as UserModelPayload;
+    const findUser = await userRepository.getUserByLogin(baseUser.login);
+    if (findUser) {
+      return res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .send("user already exists, please try another login");
+    }
     const user = await userRepository.createUser(baseUser);
     res.status(HttpStatusCode.CREATE).send(user);
   } catch (e) {
@@ -46,7 +52,7 @@ export const postUser = async (req: Request, res: Response) => {
   }
 };
 
-export const putUser = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const baseUser = req.body as UserModelPayload;
@@ -62,7 +68,7 @@ export const putUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     await userRepository.deleteUser(id);
