@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserModelPayload } from "../types";
-import { UserService } from "../services";
-import { HttpStatusCode } from "../utils/error";
+import { UserModelPayload } from "../../models";
+import { UserService } from "../../services";
+import { HttpStatusCode } from "../../utils";
 
 const get = async (req: Request, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 
-export const bodyValidationSchema = Joi.object({
+const bodyValidationSchema = Joi.object({
   login: Joi.string().required().min(4).max(30),
   password: Joi.string()
     .required()
@@ -12,3 +12,5 @@ export const bodyValidationSchema = Joi.object({
     .max(30),
   age: Joi.number().required().min(4).max(130),
 });
+
+export default bodyValidationSchema;

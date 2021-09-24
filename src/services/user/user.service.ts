@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { getRepository } from "typeorm";
-import { UserModel, UserModelPayload } from "../types/user.type";
-import { User } from "../models";
+import { UserModel, UserModelPayload } from "../../models";
+import { User } from "../../entity";
 
 const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
