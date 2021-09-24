@@ -4,7 +4,7 @@ import { createConnection } from "typeorm";
 import cors from "cors";
 
 import { userRouter } from "./routers";
-import dbConfig from "./config/database";
+import connectionOptions from "../ormconfig";
 
 const app: Application = express();
 app.use(express.json());
@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
   try {
     console.log(`Server started on port ${PORT}`);
-    await createConnection(dbConfig);
+    await createConnection(connectionOptions);
     console.log("Connected to Postgres");
   } catch (err) {
     console.error(err);
