@@ -3,17 +3,17 @@ import { getRepository } from "typeorm";
 import { UserModel, UserModelPayload } from "../types/user.entity";
 import { User } from "../models";
 
-export const getUserById = async (id: string): Promise<UserModel> => {
+const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ id: id });
 };
 
-export const getUserByLogin = async (login: string): Promise<UserModel> => {
+const getUserByLogin = async (login: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ login: login });
 };
 
-export const getAutoSuggestUsers = async (
+const getAutoSuggestUsers = async (
   loginSubstring: string,
   limit: string
 ): Promise<UserModel[]> => {
@@ -29,9 +29,7 @@ export const getAutoSuggestUsers = async (
   return result.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit);
 };
 
-export const createUser = async (
-  data: UserModelPayload
-): Promise<UserModel> => {
+const createUser = async (data: UserModelPayload): Promise<UserModel> => {
   const userRepository = getRepository(User);
   const newUser = {
     ...data,
@@ -42,7 +40,7 @@ export const createUser = async (
   return newUser;
 };
 
-export const updateUser = async (
+const updateUser = async (
   id: string,
   data: UserModelPayload
 ): Promise<UserModel> => {
@@ -51,8 +49,17 @@ export const updateUser = async (
   return userRepository.save({ ...user, ...data });
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
+const deleteUser = async (id: string): Promise<void> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
   userRepository.save({ ...user, isDeleted: true });
+};
+
+export default {
+  getUserById,
+  getUserByLogin,
+  getAutoSuggestUsers,
+  createUser,
+  updateUser,
+  deleteUser,
 };
