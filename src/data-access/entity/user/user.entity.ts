@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import { Group } from "./../group/group.entity";
+import { Entity, Column, BaseEntity, ManyToMany, PrimaryColumn } from "typeorm";
 import { UserModel } from "../../../models";
 
 @Entity("users")
 export class User extends BaseEntity implements UserModel {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryColumn("uuid")
   id: string;
 
   @Column({ unique: true })
@@ -17,4 +18,7 @@ export class User extends BaseEntity implements UserModel {
 
   @Column({ default: false })
   isDeleted: boolean;
+
+  @ManyToMany(() => Group, group => group.users)
+  group: Group;
 }
