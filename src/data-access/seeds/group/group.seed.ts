@@ -3,6 +3,13 @@ import { Group } from "../../entity";
 
 export class CreateGroup implements Seeder {
   public async run(factory: Factory): Promise<void> {
-    await factory(Group)().createMany(10);
+    await factory(Group)().create({
+      name: "admin",
+      permissions: ["READ", "SHARE", "WRITE", "DELETE", "UPLOAD_FILES"],
+    });
+    await factory(Group)().create({
+      name: "user",
+      permissions: ["READ", "WRITE"],
+    });
   }
 }

@@ -12,7 +12,9 @@
     "migration:run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run ",
     "migration:revert": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:revert",
     "seeder:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seeder:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+    "seeder:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
+    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync"
   },
   "repository": {
     "type": "git",
