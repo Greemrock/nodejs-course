@@ -3,7 +3,7 @@ import { UserModelPayload } from "../../models";
 import { UserService } from "../../services";
 import { HttpStatusCode } from "../../utils";
 
-const get = async (req: Request, res: Response) => {
+export const get = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const user = await UserService.getUserById(id);
@@ -20,7 +20,7 @@ const get = async (req: Request, res: Response) => {
   }
 };
 
-const getAll = async (req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
   const { loginSubstring, limit = "10" } = req.query;
   try {
     const user = await UserService.getAutoSuggestUsers(
@@ -36,7 +36,7 @@ const getAll = async (req: Request, res: Response) => {
   }
 };
 
-const create = async (req: Request, res: Response) => {
+export const create = async (req: Request, res: Response) => {
   try {
     const baseUser = req.body as UserModelPayload;
     const findUser = await UserService.getUserByLogin(baseUser.login);
@@ -52,7 +52,7 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
-const update = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     const baseUser = req.body as UserModelPayload;
@@ -68,7 +68,7 @@ const update = async (req: Request, res: Response) => {
   }
 };
 
-const remove = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
     await UserService.deleteUser(id);
@@ -76,12 +76,4 @@ const remove = async (req: Request, res: Response) => {
   } catch (e) {
     res.status(HttpStatusCode.NOT_FOUND).json("User not found");
   }
-};
-
-export default {
-  get,
-  getAll,
-  create,
-  update,
-  remove,
 };

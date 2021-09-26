@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
 import { getRepository } from "typeorm";
 import { UserModel, UserModelPayload } from "../../models";
-import { User } from "../../entity";
+import { User } from "../../data-access/entity";
 
-const getUserById = async (id: string): Promise<UserModel> => {
+export const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ id: id });
 };
 
-const getUserByLogin = async (login: string): Promise<UserModel> => {
+export const getUserByLogin = async (login: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
   return userRepository.findOne({ login: login });
 };
 
-const getAutoSuggestUsers = async (
+export const getAutoSuggestUsers = async (
   loginSubstring: string,
   limit: string
 ): Promise<UserModel[]> => {
@@ -29,7 +29,9 @@ const getAutoSuggestUsers = async (
   return result.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit);
 };
 
-const createUser = async (data: UserModelPayload): Promise<UserModel> => {
+export const createUser = async (
+  data: UserModelPayload
+): Promise<UserModel> => {
   const userRepository = getRepository(User);
   const newUser = {
     ...data,
@@ -40,7 +42,7 @@ const createUser = async (data: UserModelPayload): Promise<UserModel> => {
   return newUser;
 };
 
-const updateUser = async (
+export const updateUser = async (
   id: string,
   data: UserModelPayload
 ): Promise<UserModel> => {
@@ -49,17 +51,8 @@ const updateUser = async (
   return userRepository.save({ ...user, ...data });
 };
 
-const deleteUser = async (id: string): Promise<void> => {
+export const deleteUser = async (id: string): Promise<void> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
   userRepository.save({ ...user, isDeleted: true });
-};
-
-export default {
-  getUserById,
-  getUserByLogin,
-  getAutoSuggestUsers,
-  createUser,
-  updateUser,
-  deleteUser,
 };
