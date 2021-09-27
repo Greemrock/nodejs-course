@@ -15,7 +15,7 @@ export const getGroupByName = async (name: string): Promise<GroupModel> => {
 
 export const getGroupAll = async (): Promise<GroupModel[]> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.find();
+  return groupRepository.find({ relations: ["users"] });
 };
 
 export const createGroup = async (
