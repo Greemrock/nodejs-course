@@ -71,8 +71,13 @@ export const remove = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
 
-    await GroupService.deleteGroup(id);
-    res.status(HttpStatusCode.OK).json(`Group ${id} deleted`);
+    const deletedGroup = await GroupService.deleteGroup(id);
+
+    if (deletedGroup) {
+      res.status(HttpStatusCode.OK).json(`Group deleted`);
+    } else {
+      res.status(HttpStatusCode.BAD_REQUEST).json(`Group not found`);
+    }
   } catch (e) {
     res.status(HttpStatusCode.BAD_REQUEST).json(e.message);
   }

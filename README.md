@@ -1,13 +1,45 @@
 # st-2-rest-api
 
+## Installation
+
+```json
+$ npm install
+```
+
+## Running the app
+
+```json
+$ npm run start
+```
+
+## Drop tables
+
+```json
+$ npm run schema:drop
+```
+
+## Seeding tables
+
+```json
+$ npm run seeder:run
+```
+
 ## Usage
 
 - **User**
-  - [Get User](https://git.epam.com/andrei_posakhau/st-2-rest-api#get-user)
-  - [Get Users](https://git.epam.com/andrei_posakhau/st-2-rest-api#get-users)
-  - [Create User](https://git.epam.com/andrei_posakhau/st-2-rest-api#create-user)
-  - [Delete User](https://git.epam.com/andrei_posakhau/st-2-rest-api#delete-user)
-  - [Update User](https://git.epam.com/andrei_posakhau/st-2-rest-api#update-user)
+
+  - [Get User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-user)
+  - [Get Users](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-users)
+  - [Create User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#create-user)
+  - [Delete User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#delete-user)
+  - [Update User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#update-user)
+
+- **Group**
+  - [Get Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-group)
+  - [Get Groups](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-groups)
+  - [Create Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#create-group)
+  - [Delete Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#delete-group)
+  - [Update Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#update-group)
 
 ---
 
@@ -235,7 +267,7 @@ Change isDeleted on false
   - **Code:** 200 OK <br />
     **Content:**
     ```json
-    "User :id updated"
+    "User :id deleted"
     ```
 
 - **Error Response:**
@@ -299,7 +331,7 @@ Updates user.
     **Content:**
 
     ```json
-    "User :id deleted"
+    "User updated"
     ```
 
 - **Error Response:**
@@ -309,6 +341,298 @@ Updates user.
 
     ```json
     "User not found"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Get Group**
+
+Returns data about group.
+
+<details>
+
+- **URL**
+
+  /api/group:id
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[uuid]`
+
+* **Query Params**
+
+  None
+
+* **Data Params**
+
+  None
+
+* **Success Response:**
+
+  - **Code:** 200 OK <br />
+    **Content:**
+    ```typescript
+    [
+      {
+        id: "b8ec561e-af57-412e-b5c1-90b4e76f9fe8",
+        name: "developer",
+        permissions: ["DELETE", "READ", "WRITE"],
+      },
+    ];
+    ```
+
+* **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    "Group not found"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Get Groups**
+
+Returns data about sort groups.
+
+<details>
+
+- **URL**
+
+  /api/group
+
+- **Method:**
+
+  `GET`
+
+- **URL Params**
+
+  None
+
+- **Query Params**
+
+  None
+
+- **Data Params**
+
+  None
+
+- **Success Response:**
+
+  - **Code:** 200 OK <br />
+    **Content:**
+    ```typescript
+    [
+      {
+        id: "b8ec561e-af57-412e-b5c1-90b4e76f9fe8",
+        name: "developer",
+        permissions: ["DELETE", "READ", "WRITE"],
+      },
+      {
+        id: "28ec561e-af57-412e-b5c1-90b4e76f9fe8",
+        name: "user",
+        permissions: ["WRITE"],
+      },
+    ];
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    "Groups not found"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Create Group**
+
+Creates a new group.
+
+<details>
+
+- **URL**
+
+  /api/group
+
+- **Method:**
+
+  `POST`
+
+- **URL Params**
+
+  None
+
+- **Query Params**
+
+  None
+
+- **Data Params**
+
+  ```typescript
+    {
+      name: "user",
+      permissions: ["READ"],
+    },
+  ```
+
+- **Success Response:**
+
+  - **Code:** 201 CREATED <br />
+    **Content:**
+
+    ```typescript
+      {
+        id: "28ec561e-af57-412e-b5c1-90b4e76f9fe8",
+        name: "user",
+        permissions: ["READ"],
+      }
+    ```
+
+- **Error Response:**
+
+  - **Code:** 400 BAD REQUEST <br />
+    **Content:**
+
+    ```json
+    "Group already exists, please try another name"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Delete Group**
+
+Remove group (hard delete – group data is fully removed from the DB)
+
+<details>
+
+- **URL**
+
+  /api/group/:id
+
+- **Method:**
+
+  `DELETE`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[integer]`
+
+- **Query Params**
+
+  None
+
+- **Data Params**
+
+  ```typescript
+    {
+      id: "28ec561e-af57-412e-b5c1-90b4e76f9fe8",
+    }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 OK <br />
+    **Content:**
+    ```json
+    "User deleted"
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    "Group not found"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Update Group**
+
+Updates group.
+
+<details>
+
+- **URL**
+
+  /api/group/:id
+
+- **Method:**
+
+  `PUT`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[integer]`
+
+- **Query Params**
+
+  None
+
+- **Data Params**
+
+  ```typescript
+    {
+      name: "user",
+      permissions: ["READ"],
+    }
+  ```
+
+  or
+
+  ```typescript
+    {
+      groupIds: "23rtc561e-aqw4-412e-b5c1-e76f9ff9fe8",
+      userIds: ["28ec561e-af57-412e-b5c1-90b4e76f9fe8", "qweec561e-aqw4-412e-b5c1-90b4e76f9fe8"],
+    }
+  ```
+
+- **Success Response:**
+
+  - **Code:** 200 OK <br />
+    **Content:**
+
+    ```json
+    "Group updated"
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    "Group not found"
     ```
 
 </details>
