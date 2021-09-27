@@ -5,12 +5,12 @@ import { Group, User } from "../../data-access/entity";
 
 export const getGroupById = async (id: string): Promise<GroupModel> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.findOne({ id: id });
+  return groupRepository.findOne({ id: id }, { relations: ["users"] });
 };
 
 export const getGroupByName = async (name: string): Promise<GroupModel> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.findOne({ name: name });
+  return groupRepository.findOne({ name: name }, { relations: ["users"] });
 };
 
 export const getGroupAll = async (): Promise<GroupModel[]> => {
@@ -26,15 +26,30 @@ export const createGroup = async (
     ...data,
     id: uuidv4(),
   };
-  return groupRepository.save(newGroup);
+
+  await groupRepository.save(newGroup);
+
+  const createdGroup = await groupRepository.findOne(newGroup.id, {
+    relations: ["users"],
+  });
+
+  return createdGroup;
 };
 
 export const updateGroup = async (
   id: string,
   data: GroupModelPayload
-): Promise<UpdateResult> => {
+): Promise<UpdateResult | Group> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.update(id, data);
+
+  const groupToUpdate = await groupRepository.findOne(id, {
+    relations: ["users"],
+  });
+
+  if (groupToUpdate) {
+    return groupRepository.update(id, data);
+  }
+  return groupToUpdate;
 };
 
 export const deleteGroup = async (id: string): Promise<DeleteResult> => {
