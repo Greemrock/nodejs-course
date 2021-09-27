@@ -10,7 +10,7 @@ app.listen(PORT, async () => {
     await createConnection(connectionOptions);
     // const conn = await createConnection(connectionOptions);
     // await conn.runMigrations();
-    console.log("Postgress started");
+    console.log("DB started");
   } catch (err) {
     console.error(err);
     throw new Error("Unable to connect to db");
