@@ -16,7 +16,11 @@ export class CreateGroup implements Seeder {
     });
     await factory(Group)().create({
       name: "user",
-      permissions: [Permission.READ, Permission.WRITE],
+      permissions: [Permission.READ],
+    });
+    await factory(Group)().create({
+      name: "developer",
+      permissions: [Permission.READ, Permission.WRITE, Permission.UPLOAD_FILES],
     });
   }
 }
