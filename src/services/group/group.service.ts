@@ -15,7 +15,7 @@ export const getGroupByName = async (name: string): Promise<GroupModel> => {
 
 export const getGroupAll = async (): Promise<GroupModel[]> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.find();
+  return groupRepository.find({ relations: ["users"] });
 };
 
 export const createGroup = async (
@@ -35,9 +35,6 @@ export const updateGroup = async (
 ): Promise<UpdateResult> => {
   const groupRepository = getRepository(Group);
   return groupRepository.update(id, data);
-
-  // const group = await groupRepository.findOne(id);
-  // return groupRepository.save({ ...group, ...data });
 };
 
 export const deleteGroup = async (id: string): Promise<DeleteResult> => {
