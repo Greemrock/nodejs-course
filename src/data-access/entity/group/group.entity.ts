@@ -30,11 +30,4 @@ export class Group extends BaseEntity {
   })
   @JoinTable()
   users: User[];
-
-  async addUsersToGroup(userIds: User[]): Promise<void> {
-    if (this.users === undefined) {
-      this.users = await new Array<User>();
-    }
-    await this.users.push(...userIds);
-  }
 }

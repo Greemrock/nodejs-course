@@ -48,18 +48,30 @@ export const addUsersToGroup = async (
 ): Promise<void> => {
   const groupRepository = getRepository(Group);
   const userRepository = getRepository(User);
+
   const userIdsArray = Object.values(userIds).flat();
-  const userEntitiesArray: User[] = [];
+  const groupToAddUsersIds: Group = await groupRepository.findOne(
+    { id: groupId },
+    {
+      relations: ["users"],
+    }
+  );
 
-  const groupToAddUsersIds: Group = await groupRepository.findOne({
-    id: groupId,
-  });
   userIdsArray.forEach(async id => {
+    const isUserInGroup =
+      groupToAddUsersIds.users.filter(user => user.id === id).length > 0;
+
+    if (isUserInGroup) {
+      return;
+    }
+
     const userEntity = await userRepository.findOne({ id: id });
-    userEntitiesArray.push(userEntity);
+
+    if (userEntity) {
+      groupToAddUsersIds.users.push(userEntity);
+    }
   });
 
-  await groupToAddUsersIds.addUsersToGroup(userEntitiesArray);
   await getManager().transaction(async transactionalEntityManager => {
     await transactionalEntityManager.save(groupToAddUsersIds);
   });

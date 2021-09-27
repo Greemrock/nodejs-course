@@ -20,5 +20,5 @@ export class User extends BaseEntity implements UserModel {
   isDeleted: boolean;
 
   @ManyToMany(() => Group, group => group.users)
-  group: Group;
+  group: Group[];
 }
