@@ -1,15 +1,22 @@
 import { Factory, Seeder } from "typeorm-seeding";
+import { Permission } from "../../../models";
 import { Group } from "../../entity";
 
 export class CreateGroup implements Seeder {
   public async run(factory: Factory): Promise<void> {
     await factory(Group)().create({
       name: "admin",
-      permissions: ["READ", "SHARE", "WRITE", "DELETE", "UPLOAD_FILES"],
+      permissions: [
+        Permission.DELETE,
+        Permission.READ,
+        Permission.SHARE,
+        Permission.UPLOAD_FILES,
+        Permission.WRITE,
+      ],
     });
     await factory(Group)().create({
       name: "user",
-      permissions: ["READ", "WRITE"],
+      permissions: [Permission.READ, Permission.WRITE],
     });
   }
 }

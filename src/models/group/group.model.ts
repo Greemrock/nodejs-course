@@ -16,3 +16,7 @@ export type GroupModelPayload = {
   name: string;
   permissions: Array<Permission>;
 };
+
+export type UserToGroupModelPayload = {
+  userIds: string[];
+};

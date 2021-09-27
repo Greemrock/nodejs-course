@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { DeleteResult, getRepository, UpdateResult } from "typeorm";
+import { DeleteResult, getManager, getRepository, UpdateResult } from "typeorm";
 import { GroupModel, GroupModelPayload } from "../../models";
-import { Group } from "../../data-access/entity";
+import { Group, User } from "../../data-access/entity";
 
 export const getGroupById = async (id: string): Promise<GroupModel> => {
   const groupRepository = getRepository(Group);
@@ -35,12 +35,32 @@ export const updateGroup = async (
 ): Promise<UpdateResult> => {
   const groupRepository = getRepository(Group);
   return groupRepository.update(id, data);
-
-  // const group = await groupRepository.findOne(id);
-  // return groupRepository.save({ ...group, ...data });
 };
 
 export const deleteGroup = async (id: string): Promise<DeleteResult> => {
   const groupRepository = getRepository(Group);
   return groupRepository.delete(id);
+};
+
+export const addUsersToGroup = async (
+  groupId: string,
+  userIds: string[]
+): Promise<void> => {
+  const groupRepository = getRepository(Group);
+  const userRepository = getRepository(User);
+  const userIdsArray = Object.values(userIds).flat();
+  const userEntitiesArray: User[] = [];
+
+  const groupToAddUsersIds: Group = await groupRepository.findOne({
+    id: groupId,
+  });
+  userIdsArray.forEach(async id => {
+    const userEntity = await userRepository.findOne({ id: id });
+    userEntitiesArray.push(userEntity);
+  });
+
+  await groupToAddUsersIds.addUsersToGroup(userEntitiesArray);
+  await getManager().transaction(async transactionalEntityManager => {
+    await transactionalEntityManager.save(groupToAddUsersIds);
+  });
 };
