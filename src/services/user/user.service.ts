@@ -38,7 +38,9 @@ export const createUser = async (
     id: uuidv4(),
     isDeleted: false,
   };
+
   await userRepository.save(newUser);
+
   return newUser;
 };
 
@@ -48,11 +50,13 @@ export const updateUser = async (
 ): Promise<UserModel> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
+
   return userRepository.save({ ...user, ...data });
 };
 
 export const deleteUser = async (id: string): Promise<void> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
+
   userRepository.save({ ...user, isDeleted: true });
 };

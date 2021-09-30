@@ -4,14 +4,14 @@ import {
   BaseEntity,
   JoinTable,
   ManyToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "..";
 import { Permission } from "../../../models";
 
 @Entity("groups")
 export class Group extends BaseEntity {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ unique: true })

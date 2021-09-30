@@ -1,6 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
 import { DeleteResult, getManager, getRepository, UpdateResult } from "typeorm";
-import { GroupModel, GroupModelPayload } from "../../models";
+import { GroupModel } from "../../models";
 import { Group, User } from "../../data-access/entity";
 
 export const getGroupById = async (id: string): Promise<GroupModel> => {
@@ -18,27 +17,14 @@ export const getGroupAll = async (): Promise<GroupModel[]> => {
   return groupRepository.find({ relations: ["users"] });
 };
 
-export const createGroup = async (
-  data: GroupModelPayload
-): Promise<GroupModel> => {
+export const createGroup = async (data: GroupModel): Promise<GroupModel> => {
   const groupRepository = getRepository(Group);
-  const newGroup: GroupModel = {
-    ...data,
-    id: uuidv4(),
-  };
-
-  await groupRepository.save(newGroup);
-
-  const createdGroup = await groupRepository.findOne(newGroup.id, {
-    relations: ["users"],
-  });
-
-  return createdGroup;
+  return await groupRepository.save(data);
 };
 
 export const updateGroup = async (
   id: string,
-  data: GroupModelPayload
+  data: GroupModel
 ): Promise<UpdateResult | Group> => {
   const groupRepository = getRepository(Group);
   const groupToUpdate = await groupRepository.findOne(id, {

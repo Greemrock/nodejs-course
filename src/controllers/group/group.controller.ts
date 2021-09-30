@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { GroupModelPayload } from "../../models";
 import { GroupService } from "../../services";
 import { HttpStatusCode } from "../../utils";
 
@@ -34,7 +33,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const baseGroup = req.body as GroupModelPayload;
+    const baseGroup = req.body;
     const findGroup = await GroupService.getGroupByName(baseGroup.name);
 
     if (findGroup) {
@@ -44,6 +43,7 @@ export const create = async (req: Request, res: Response) => {
     }
 
     const group = await GroupService.createGroup(baseGroup);
+
     res.status(HttpStatusCode.CREATE).send(group);
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
