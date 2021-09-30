@@ -1,6 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-import { getRepository } from "typeorm";
-import { UserModel, UserModelPayload } from "../../models";
+import { getRepository, Like } from "typeorm";
+import { UserModel } from "../../models";
 import { User } from "../../data-access/entity";
 
 export const getUserById = async (id: string): Promise<UserModel> => {
@@ -20,7 +19,7 @@ export const getAutoSuggestUsers = async (
   const userRepository = getRepository(User);
   const result = loginSubstring
     ? await userRepository.find({
-        login: loginSubstring,
+        login: Like(`%${loginSubstring}%`),
         isDeleted: false,
       })
     : await userRepository.find({
@@ -29,34 +28,29 @@ export const getAutoSuggestUsers = async (
   return result.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit);
 };
 
-export const createUser = async (
-  data: UserModelPayload
-): Promise<UserModel> => {
+export const createUser = async (data: UserModel): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  const newUser = {
-    ...data,
-    id: uuidv4(),
-    isDeleted: false,
-  };
-
-  await userRepository.save(newUser);
-
-  return newUser;
+  return await userRepository.save(data);
 };
 
-export const updateUser = async (
-  id: string,
-  data: UserModelPayload
-): Promise<UserModel> => {
+export const updateUser = async (id: string, data: UserModel) => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
 
-  return userRepository.save({ ...user, ...data });
+  if (!user) {
+    return;
+  }
+
+  return await userRepository.save({ ...user, ...data });
 };
 
-export const deleteUser = async (id: string): Promise<void> => {
+export const deleteUser = async (id: string): Promise<User> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne(id);
 
-  userRepository.save({ ...user, isDeleted: true });
+  if (!user) {
+    return;
+  }
+
+  return userRepository.save({ ...user, isDeleted: true });
 };

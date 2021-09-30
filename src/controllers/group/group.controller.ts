@@ -56,7 +56,7 @@ export const update = async (req: Request, res: Response) => {
     const body = req.body;
 
     const group = await GroupService.updateGroup(id, body);
-
+    console.log(group);
     if (group) {
       res.status(HttpStatusCode.OK).json(`Group updated`);
     } else {
