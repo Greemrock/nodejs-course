@@ -8,4 +8,5 @@ groupRouter
   .get("/", GroupController.getAll)
   .post("/", GroupController.create)
   .put("/:id", GroupController.update)
-  .delete("/:id", GroupController.remove);
+  .delete("/:id", GroupController.remove)
+  .put("/:id/users", GroupController.addUsers);

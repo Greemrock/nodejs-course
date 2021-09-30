@@ -55,15 +55,32 @@ export const update = async (req: Request, res: Response) => {
     const id = req.params.id;
     const body = req.body;
 
-    if (body.userIds) {
-      await GroupService.addUsersToGroup(id, body);
-    } else {
-      await GroupService.updateGroup(id, body);
-    }
+    const group = await GroupService.updateGroup(id, body);
 
-    res.status(HttpStatusCode.OK).json(`Group updated`);
+    if (group) {
+      res.status(HttpStatusCode.OK).json(`Group updated`);
+    } else {
+      res.status(HttpStatusCode.BAD_REQUEST).json("Check id group");
+    }
   } catch (e) {
-    res.status(HttpStatusCode.BAD_REQUEST).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+  }
+};
+
+export const addUsers = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const body = req.body;
+
+    const group = await GroupService.addUsersToGroup(id, body);
+
+    if (group) {
+      res.status(HttpStatusCode.OK).json("Group updated");
+    } else {
+      res.status(HttpStatusCode.BAD_REQUEST).json("Check id users");
+    }
+  } catch (e) {
+    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
   }
 };
 

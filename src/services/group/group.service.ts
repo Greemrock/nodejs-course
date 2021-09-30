@@ -41,15 +41,15 @@ export const updateGroup = async (
   data: GroupModelPayload
 ): Promise<UpdateResult | Group> => {
   const groupRepository = getRepository(Group);
-
   const groupToUpdate = await groupRepository.findOne(id, {
     relations: ["users"],
   });
 
-  if (groupToUpdate) {
-    return groupRepository.update(id, data);
+  if (!groupToUpdate) {
+    return;
   }
-  return groupToUpdate;
+
+  return groupRepository.update(id, data);
 };
 
 export const deleteGroup = async (id: string): Promise<DeleteResult> => {
@@ -60,34 +60,24 @@ export const deleteGroup = async (id: string): Promise<DeleteResult> => {
 export const addUsersToGroup = async (
   groupId: string,
   userIds: string[]
-): Promise<void> => {
-  const groupRepository = getRepository(Group);
-  const userRepository = getRepository(User);
-
+): Promise<Group> => {
   const userIdsArray = Object.values(userIds).flat();
-  const groupToAddUsersIds: Group = await groupRepository.findOne(
-    { id: groupId },
-    {
+
+  return await getManager().transaction(async transactionalEntityManager => {
+    const users = await transactionalEntityManager.findByIds(
+      User,
+      userIdsArray
+    );
+    const group = await transactionalEntityManager.findOne(Group, groupId, {
       relations: ["users"],
-    }
-  );
+    });
 
-  userIdsArray.forEach(async id => {
-    const isUserInGroup =
-      groupToAddUsersIds.users.filter(user => user.id === id).length > 0;
-
-    if (isUserInGroup) {
+    if (!users.length) {
       return;
     }
 
-    const userEntity = await userRepository.findOne({ id: id });
+    group.users = [...group.users, ...users];
 
-    if (userEntity) {
-      groupToAddUsersIds.users.push(userEntity);
-    }
-  });
-
-  await getManager().transaction(async transactionalEntityManager => {
-    await transactionalEntityManager.save(groupToAddUsersIds);
+    return await transactionalEntityManager.save(group);
   });
 };
