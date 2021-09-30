@@ -28,18 +28,19 @@ $ npm run seeder:run
 
 - **User**
 
-  - [Get User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-user)
-  - [Get Users](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-users)
-  - [Create User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#create-user)
-  - [Delete User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#delete-user)
-  - [Update User](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#update-user)
+  - Get User
+  - Get Users
+  - Create User
+  - Delete User
+  - Update User
 
 - **Group**
-  - [Get Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-group)
-  - [Get Groups](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#get-groups)
-  - [Create Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#create-group)
-  - [Delete Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#delete-group)
-  - [Update Group](https://git.epam.com/andrei_posakhau/st-2-rest-api/-/tree/task-6-3#update-group)
+  - Get Group
+  - Get Groups
+  - Create Group
+  - Delete Group
+  - Update Group
+  - Add Users to Group
 
 ---
 
@@ -558,7 +559,7 @@ Remove group (hard delete – group data is fully removed from the DB)
   - **Code:** 200 OK <br />
     **Content:**
     ```json
-    "User deleted"
+    "Group deleted"
     ```
 
 - **Error Response:**
@@ -608,7 +609,54 @@ Updates group.
     }
   ```
 
-  or
+- **Success Response:**
+
+  - **Code:** 200 OK <br />
+    **Content:**
+
+    ```json
+    "Group updated"
+    ```
+
+- **Error Response:**
+
+  - **Code:** 404 NOT FOUND <br />
+    **Content:**
+
+    ```json
+    "Check id group"
+    ```
+
+</details>
+<br>
+
+---
+
+## **Add Users to Group**
+
+Updates group.
+
+<details>
+
+- **URL**
+
+  /api/group/:id/users
+
+- **Method:**
+
+  `PUT`
+
+- **URL Params**
+
+  **Required:**
+
+  `id=[integer]`
+
+- **Query Params**
+
+  None
+
+- **Data Params**
 
   ```typescript
     {
@@ -632,7 +680,7 @@ Updates group.
     **Content:**
 
     ```json
-    "Group not found"
+    "Check id group"
     ```
 
 </details>
