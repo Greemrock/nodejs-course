@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services";
+import { DEFAULT_USER_LIMIT } from "../../Shared/constant";
 import { HttpStatusCode } from "../../utils";
 
 export const get = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const user = await UserService.getUserById(id);
 
     if (!user) {
@@ -23,7 +24,7 @@ export const get = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
   try {
-    const { loginSubstring, limit = "10" } = req.query;
+    const { loginSubstring, limit = DEFAULT_USER_LIMIT } = req.query;
     const user = await UserService.getAutoSuggestUsers(
       loginSubstring as string,
       limit as string
@@ -32,7 +33,7 @@ export const getAll = async (req: Request, res: Response) => {
     if (user) {
       res.status(HttpStatusCode.OK).send(user);
     } else {
-      res.status(HttpStatusCode.NOT_FOUND).json("users not found");
+      res.status(HttpStatusCode.NOT_FOUND).json("Users not found");
     }
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
@@ -47,7 +48,7 @@ export const create = async (req: Request, res: Response) => {
     if (findUser) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
-        .json("user already exists, please try another login");
+        .json("User already exists, please try another login");
     }
 
     const user = await UserService.createUser(baseUser);
@@ -60,7 +61,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const baseUser = req.body;
     const user = await UserService.updateUser(id, baseUser);
 
@@ -80,7 +81,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const user = await UserService.deleteUser(id);
 
     if (!user) {

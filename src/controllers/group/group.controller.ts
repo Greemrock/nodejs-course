@@ -4,7 +4,7 @@ import { HttpStatusCode } from "../../utils";
 
 export const get = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const user = await GroupService.getGroupById(id);
 
     if (!user) {
@@ -52,7 +52,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const body = req.body;
 
     const group = await GroupService.updateGroup(id, body);
@@ -69,7 +69,7 @@ export const update = async (req: Request, res: Response) => {
 
 export const addUsers = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
     const body = req.body;
 
     const group = await GroupService.addUsersToGroup(id, body);
@@ -86,7 +86,7 @@ export const addUsers = async (req: Request, res: Response) => {
 
 export const remove = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const { id } = req.params;
 
     const deletedGroup = await GroupService.deleteGroup(id);
 

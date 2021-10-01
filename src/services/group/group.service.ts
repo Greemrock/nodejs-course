@@ -27,9 +27,12 @@ export const updateGroup = async (
   data: GroupModel
 ): Promise<UpdateResult | Group> => {
   const groupRepository = getRepository(Group);
-  const group = await groupRepository.findOne(id, {
-    relations: ["users"],
-  });
+  const group = await groupRepository.findOne(
+    { id: id },
+    {
+      relations: ["users"],
+    }
+  );
 
   if (!group) {
     return;

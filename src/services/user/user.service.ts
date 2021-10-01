@@ -35,7 +35,7 @@ export const createUser = async (data: UserModel): Promise<UserModel> => {
 
 export const updateUser = async (id: string, data: UserModel) => {
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne(id);
+  const user = await userRepository.findOne({ id: id });
 
   if (!user) {
     return;
@@ -46,7 +46,7 @@ export const updateUser = async (id: string, data: UserModel) => {
 
 export const deleteUser = async (id: string): Promise<User> => {
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne(id);
+  const user = await userRepository.findOne({ id: id });
 
   if (!user) {
     return;
