@@ -11,8 +11,6 @@ app.listen(PORT, async () => {
 
     await createConnection(connectionOptions);
 
-    console.log("DB started");
-
     process.on(
       "uncaughtException",
       (reason: Error, promise: Promise<unknown>) => {
