@@ -1,7 +1,8 @@
 import morgan from "morgan";
 import chalk from "chalk";
+import { Request } from "express";
 
-export const morganMiddleware = morgan(function (tokens, req, res) {
+export const morganMiddleware = morgan(function (tokens, req: Request, res) {
   return [
     chalk.hex("#ff4757").bold("🍄  Morgan --> "),
     chalk.hex("#34ace0").bold(tokens.method(req, res)),
@@ -10,5 +11,6 @@ export const morganMiddleware = morgan(function (tokens, req, res) {
     chalk.hex("#2ed573").bold(tokens["response-time"](req, res) + " ms"),
     chalk.hex("#f78fb3").bold("@ " + tokens.date(req, res)),
     chalk.hex("#1e90ff")(tokens["user-agent"](req, res)),
+    chalk.yellow.bold("body:") + ` ${JSON.stringify(req.body)}`,
   ].join(" ");
 });
