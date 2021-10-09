@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createValidator } from "express-joi-validation";
 import { UserController } from "../../controllers";
-import { userValidate } from "../../validate";
+import { userValidate } from "../../middlewares";
 
 export const userRouter = Router();
 const validator = createValidator();

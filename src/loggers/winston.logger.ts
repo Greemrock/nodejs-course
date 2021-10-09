@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import winston from "winston";
+import { addColors, createLogger, format, transports } from "winston";
+
+const { combine, timestamp, colorize, printf } = format;
 
 const colors = {
   error: "red",
@@ -9,29 +11,19 @@ const colors = {
   debug: "white",
 };
 
-winston.addColors(colors);
+addColors(colors);
 
-const format = winston.format.combine(
-  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
-  winston.format.colorize({ all: true }),
-  winston.format.printf(
-    info => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+const formatLogger = combine(
+  timestamp({ format: "YYYY-MM-DD HH:mm:ss:ms" }),
+  colorize({ all: true }),
+  printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 );
 
-const transports = [
-  new winston.transports.Console(),
-  new winston.transports.File({
-    filename: "logs/error.log",
-    level: "error",
-  }),
-  new winston.transports.File({ filename: "logs/all.log" }),
-];
+const transportsLogger = [new transports.Console()];
 
-export const winstonLogger = winston.createLogger({
-  level: "error",
-  format,
-  transports,
+export const winstonLogger = createLogger({
+  format: formatLogger,
+  transports: transportsLogger,
 });
 
 export function errorInternalServer(

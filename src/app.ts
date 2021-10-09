@@ -1,5 +1,6 @@
 import express from "express";
-import { morganMiddleware, errorInternalServer } from "./loggers";
+import { errorInternalServer } from "./loggers";
+import { morganMiddleware } from "./middlewares";
 import { userRouter, groupRouter } from "./routers";
 
 export const app = express();
