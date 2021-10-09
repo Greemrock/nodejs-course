@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
   try {
-    console.log(`Server started on port ${PORT}`);
+    winstonLogger.info(`Server started on port ${PORT}`);
 
     await createConnection(connectionOptions);
 
@@ -24,7 +24,6 @@ app.listen(PORT, async () => {
       winstonLogger.error(`${err.name}: ${err.message}`);
     });
   } catch (err) {
-    console.error(err);
-    throw new Error("Unable to connect to db");
+    winstonLogger.error(`${err.name}: ${err.message}`);
   }
 });

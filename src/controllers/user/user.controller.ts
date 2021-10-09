@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services";
-import { DEFAULT_USER_LIMIT } from "../../Shared/constant";
+import { DEFAULT_USER_LIMIT } from "../../shared/constant";
 import { HttpStatusCode } from "../../utils";
 
 export const get = async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ export const get = async (req: Request, res: Response) => {
 
     if (!user) {
       res.status(HttpStatusCode.NOT_FOUND).json("User not found");
-    } else if (user.isDeleted === true) {
+    } else if (user.isDeleted) {
       res
         .status(HttpStatusCode.BAD_REQUEST)
         .json("User deleted, please try another request");
