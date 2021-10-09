@@ -1,8 +1,12 @@
+import { Request, Response } from "express";
 import morgan from "morgan";
 import chalk from "chalk";
-import { Request } from "express";
 
-export const morganMiddleware = morgan(function (tokens, req: Request, res) {
+export const morganMiddleware = morgan(function (
+  tokens,
+  req: Request,
+  res: Response
+) {
   return [
     chalk.hex("#ff4757").bold("Morgan --> "),
     chalk.hex("#34ace0").bold(tokens.method(req, res)),
