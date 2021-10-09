@@ -1,4 +1,5 @@
 import { Factory, Seeder } from "typeorm-seeding";
+
 import { Permission } from "../../../models";
 import { Group } from "../../entity";
 

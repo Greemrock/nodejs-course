@@ -1,4 +1,5 @@
 import { createConnection } from "typeorm-seeding";
+
 import connectionOptions from "../ormconfig";
 import { app } from "./app";
 import { winstonLogger } from "./loggers";

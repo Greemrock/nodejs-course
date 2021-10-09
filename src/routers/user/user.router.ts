@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { createValidator } from "express-joi-validation";
+
 import { UserController } from "../../controllers";
 import { userValidate } from "../../middlewares";
 

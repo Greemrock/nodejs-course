@@ -6,7 +6,8 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "..";
+
+import { User } from "../user/user.entity";
 import { Permission } from "../../../models";
 
 @Entity("groups")
