@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { UserModel } from "../../models";
 
 import { UserService } from "../../services";
 import { DEFAULT_USER_LIMIT } from "../../shared/constant";
@@ -43,7 +44,7 @@ export const getAll = async (req: Request, res: Response) => {
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const baseUser = req.body;
+    const baseUser = req.body as UserModel;
     const findUser = await UserService.getUserByLogin(baseUser.login);
 
     if (findUser) {

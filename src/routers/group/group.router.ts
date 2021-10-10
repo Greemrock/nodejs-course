@@ -1,13 +1,14 @@
 import { Router } from "express";
 
 import { GroupController } from "../../controllers";
+import { authMiddleware } from "../../middlewares";
 
 export const groupRouter = Router();
 
 groupRouter
-  .get("/:id", GroupController.get)
-  .get("/", GroupController.getAll)
-  .post("/", GroupController.create)
-  .put("/:id", GroupController.update)
-  .delete("/:id", GroupController.remove)
-  .put("/:id/users", GroupController.addUsers);
+  .get("/:id", authMiddleware, GroupController.get)
+  .get("/", authMiddleware, GroupController.getAll)
+  .post("/", authMiddleware, GroupController.create)
+  .put("/:id", authMiddleware, GroupController.update)
+  .delete("/:id", authMiddleware, GroupController.remove)
+  .put("/:id/users", authMiddleware, GroupController.addUsers);
