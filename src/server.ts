@@ -12,6 +12,8 @@ app.listen(PORT, async () => {
 
     await createConnection(connectionOptions);
 
+    winstonLogger.info(`DB connected`);
+
     process.on(
       "uncaughtException",
       (reason: Error, promise: Promise<unknown>) => {
