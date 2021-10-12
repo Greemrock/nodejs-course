@@ -3,7 +3,6 @@ import { getRepository, Like } from "typeorm";
 
 import { UserModel } from "../../models";
 import { User } from "../../data-access/entity";
-import { SECRET_KEY, TOKEN_EXPIRATION_TIME } from "../../shared/constant";
 
 export const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
@@ -35,8 +34,8 @@ export const createUser = async (
   data: UserModel
 ): Promise<{ token: string; user: UserModel }> => {
   const userRepository = getRepository(User);
-  const token = jwt.sign({ data }, SECRET_KEY, {
-    expiresIn: TOKEN_EXPIRATION_TIME,
+  const token = jwt.sign({ data }, process.env.SECRET_KEY, {
+    expiresIn: process.env.TOKEN_EXPIRATION_TIME,
   });
   const user = await userRepository.save(data);
   return { token: token, user: user };

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { winstonLogger } from "../loggers";
 
-import { SECRET_KEY } from "../shared/constant";
 import { HttpStatusCode } from "../utils";
 
 export const authMiddleware = (
@@ -14,7 +13,7 @@ export const authMiddleware = (
     const token = req.headers["x-access-token"] as string;
 
     if (token) {
-      jwt.verify(token, SECRET_KEY);
+      jwt.verify(token, process.env.SECRET_KEY);
       next();
     } else {
       res
