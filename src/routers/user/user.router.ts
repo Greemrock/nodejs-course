@@ -9,7 +9,7 @@ export const userRouter = Router();
 userRouter
   .route("/")
   .get(authMiddleware, UserController.getAll)
-  .post(validator, UserController.create);
+  .post(authMiddleware, validator, UserController.create);
 
 userRouter
   .route("/:id")

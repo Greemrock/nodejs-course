@@ -15,7 +15,7 @@ export const login = async (req: Request, res: Response) => {
       res.status(HttpStatusCode.OK).send(token);
     } else {
       res
-        .status(HttpStatusCode.FORBIDDEN_ERROR)
+        .status(HttpStatusCode.UNAUTHORIZED_ERROR)
         .json("Bad login or password combination");
     }
   } catch (e) {

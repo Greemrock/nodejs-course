@@ -10,17 +10,19 @@ export const authMiddleware = (
   next: NextFunction
 ): void => {
   try {
-    const token = req.headers["x-access-token"] as string;
+    const { authorization } = req.headers;
 
-    if (token) {
+    if (authorization) {
+      const token = authorization.split(" ")[1];
+
       jwt.verify(token, process.env.SECRET_KEY);
-      next();
     } else {
       res
         .status(HttpStatusCode.UNAUTHORIZED_ERROR)
         .json("Failed to authenticate token.");
       winstonLogger.error("Failed to authenticate token.");
     }
+    next();
   } catch (error) {
     res.status(HttpStatusCode.FORBIDDEN_ERROR).send(error.message);
     winstonLogger.error(`${error.name}: ${error.message}`);

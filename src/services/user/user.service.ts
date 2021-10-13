@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import { getRepository, Like } from "typeorm";
 
 import { UserModel } from "../../models";
@@ -30,15 +29,9 @@ export const getAutoSuggestUsers = async (
   return result.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit);
 };
 
-export const createUser = async (
-  data: UserModel
-): Promise<{ token: string; user: UserModel }> => {
+export const createUser = async (data: UserModel): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  const token = jwt.sign({ data }, process.env.SECRET_KEY, {
-    expiresIn: process.env.TOKEN_EXPIRATION_TIME,
-  });
-  const user = await userRepository.save(data);
-  return { token: token, user: user };
+  return await userRepository.save(data);
 };
 
 export const updateUser = async (id: string, data: UserModel) => {
