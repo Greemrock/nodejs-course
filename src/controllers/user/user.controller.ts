@@ -45,15 +45,13 @@ export const getAll = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     const baseUser = req.body as UserModel;
-    const findUser = await UserService.getUserByLogin(baseUser.login);
+    const user = await UserService.createUser(baseUser);
 
-    if (findUser) {
+    if (!user) {
       return res
         .status(HttpStatusCode.BAD_REQUEST)
         .json("User already exists, please try another login");
     }
-
-    const user = await UserService.createUser(baseUser);
 
     res.status(HttpStatusCode.CREATE).send(user);
   } catch (e) {

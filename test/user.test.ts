@@ -65,22 +65,38 @@ describe("UserController", () => {
     });
   });
 
-  // describe("POST /api/user/ - create", () => {
-  //   test("should add user to the database", async () => {
-  //     const payload = generateUserPayload();
-  //     const userData = generateUserData(payload);
-  //     const spy = jest
-  //       .spyOn(UserService, "createUser")
-  //       .mockResolvedValueOnce(null);
+  describe("POST /api/user/ - create", () => {
+    test("should return 400 and message ", async () => {
+      const payload = generateUserPayload();
+      const spy = jest
+        .spyOn(UserService, "createUser")
+        .mockResolvedValueOnce(null);
 
-  //     const response = await request(app).post("/api/user").send(payload);
+      const response = await request(app).post("/api/user").send(payload);
 
-  //     expect(response.text).toMatchObject(payload);
-  //     expect(response.body).toEqual(userData);
-  //     expect(spy).toHaveBeenCalledWith(payload);
-  //     expect(spy).toHaveBeenCalledTimes(1);
-  //   });
-  // });
+      expect(response.body).toEqual(
+        "User already exists, please try another login"
+      );
+      expect(response.status).toEqual(400);
+      expect(spy).toHaveBeenCalledWith(payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test("should return new user", async () => {
+      const payload = generateUserPayload();
+      const userData = generateUserData(payload);
+      const spy = jest
+        .spyOn(UserService, "createUser")
+        .mockResolvedValueOnce(userData);
+
+      const response = await request(app).post("/api/user").send(payload);
+
+      expect(response.body).toEqual(userData);
+      expect(response.status).toEqual(201);
+      expect(spy).toHaveBeenCalledWith(payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
 
   describe("GET /api/user/:id - getById", () => {
     test("should return user from the database", async () => {

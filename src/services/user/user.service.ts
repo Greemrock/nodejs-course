@@ -29,8 +29,18 @@ export const getAutoSuggestUsers = async (
   return result.sort((a, b) => a.login.localeCompare(b.login)).slice(0, +limit);
 };
 
-export const createUser = async (data: UserModel): Promise<UserModel> => {
+export const createUser = async (
+  data: UserModel
+): Promise<UserModel | null> => {
   const userRepository = getRepository(User);
+
+  const checkLogin = await userRepository.find({
+    where: { login: data.login, isDeleted: false },
+  });
+
+  if (checkLogin.length !== 0) {
+    return undefined;
+  }
   return await userRepository.save(data);
 };
 
