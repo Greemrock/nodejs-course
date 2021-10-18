@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { UserModel } from "../../models";
 
+import { UserModel } from "../../models";
 import { UserService } from "../../services";
 import { DEFAULT_USER_LIMIT } from "../../shared/constant";
 import { HttpStatusCode } from "../../utils";
@@ -32,10 +32,10 @@ export const getAll = async (req: Request, res: Response) => {
       limit as string
     );
 
-    if (user) {
-      res.status(HttpStatusCode.OK).send(user);
-    } else {
+    if (user.length === 0) {
       res.status(HttpStatusCode.NOT_FOUND).json("Users not found");
+    } else {
+      res.status(HttpStatusCode.OK).send(user);
     }
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
@@ -67,12 +67,8 @@ export const update = async (req: Request, res: Response) => {
     const baseUser = req.body;
     const user = await UserService.updateUser(id, baseUser);
 
-    if (!user) {
+    if (!user || user.isDeleted) {
       res.status(HttpStatusCode.BAD_REQUEST).json("Check id user");
-    } else if (user.isDeleted === true) {
-      return res
-        .status(HttpStatusCode.BAD_REQUEST)
-        .json("User deleted, please try another request");
     } else {
       res.status(HttpStatusCode.OK).json(`User updated`);
     }
@@ -89,7 +85,7 @@ export const remove = async (req: Request, res: Response) => {
     if (!user) {
       res.status(HttpStatusCode.BAD_REQUEST).json("Check id user");
     } else {
-      res.status(HttpStatusCode.OK).json(`User deleted`);
+      res.status(HttpStatusCode.OK).json("User deleted");
     }
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);

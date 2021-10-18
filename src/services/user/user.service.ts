@@ -34,7 +34,10 @@ export const createUser = async (data: UserModel): Promise<UserModel> => {
   return await userRepository.save(data);
 };
 
-export const updateUser = async (id: string, data: UserModel) => {
+export const updateUser = async (
+  id: string,
+  data: UserModel
+): Promise<UserModel> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ id: id });
 
@@ -45,7 +48,7 @@ export const updateUser = async (id: string, data: UserModel) => {
   return await userRepository.save({ ...user, ...data });
 };
 
-export const deleteUser = async (id: string): Promise<User> => {
+export const deleteUser = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
   const user = await userRepository.findOne({ id: id });
 

@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 
-import { UserModel } from "./../../models";
+import { SECRET_KEY, EXPIRATION_TIME } from "../../shared/constant";
 
-export const login = async (user: UserModel) => {
-  const token = jwt.sign({ user }, process.env.SECRET_KEY, {
-    expiresIn: process.env.TOKEN_EXPIRATION_TIME,
+export const login = (id: string) => {
+  const token = jwt.sign({ id }, SECRET_KEY, {
+    expiresIn: EXPIRATION_TIME,
   });
   return token;
 };

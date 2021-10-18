@@ -10,7 +10,7 @@ export const login = async (req: Request, res: Response) => {
     const user = await UserService.getUserByLogin(login);
 
     if (user && user.password === password) {
-      const token = await LoginService.login(user);
+      const token = await LoginService.login(user.id);
 
       res.status(HttpStatusCode.OK).send(token);
     } else {
