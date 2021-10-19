@@ -9,10 +9,10 @@ export const get = async (req: Request, res: Response) => {
     const user = await GroupService.getGroupById(id);
 
     if (!user) {
-      return res.status(HttpStatusCode.NOT_FOUND).json("Group not found");
+      res.status(HttpStatusCode.NOT_FOUND).json("Group not found");
+    } else {
+      res.status(HttpStatusCode.OK).send(user);
     }
-
-    res.status(HttpStatusCode.OK).send(user);
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
   }
@@ -35,17 +35,15 @@ export const getAll = async (req: Request, res: Response) => {
 export const create = async (req: Request, res: Response) => {
   try {
     const baseGroup = req.body;
-    const findGroup = await GroupService.getGroupByName(baseGroup.name);
-
-    if (findGroup) {
-      return res
-        .status(HttpStatusCode.BAD_REQUEST)
-        .json("Group already exists, please try another name");
-    }
-
     const group = await GroupService.createGroup(baseGroup);
 
-    res.status(HttpStatusCode.CREATE).send(group);
+    if (!group) {
+      res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json("Group already exists, please try another name");
+    } else {
+      res.status(HttpStatusCode.CREATE).send(group);
+    }
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
   }
@@ -55,8 +53,8 @@ export const update = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const body = req.body;
-
     const group = await GroupService.updateGroup(id, body);
+
     if (group) {
       res.status(HttpStatusCode.OK).json(`Group updated`);
     } else {
@@ -91,9 +89,9 @@ export const remove = async (req: Request, res: Response) => {
     const deletedGroup = await GroupService.deleteGroup(id);
 
     if (deletedGroup) {
-      res.status(HttpStatusCode.OK).json(`Group deleted`);
+      res.status(HttpStatusCode.OK).json("Group deleted");
     } else {
-      res.status(HttpStatusCode.BAD_REQUEST).json(`Group not found`);
+      res.status(HttpStatusCode.BAD_REQUEST).json("Check id group");
     }
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);

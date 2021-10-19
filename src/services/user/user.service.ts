@@ -39,7 +39,7 @@ export const createUser = async (
   });
 
   if (checkLogin.length !== 0) {
-    return undefined;
+    return null;
   }
   return await userRepository.save(data);
 };

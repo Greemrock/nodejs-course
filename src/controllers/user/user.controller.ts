@@ -48,12 +48,12 @@ export const create = async (req: Request, res: Response) => {
     const user = await UserService.createUser(baseUser);
 
     if (!user) {
-      return res
+      res
         .status(HttpStatusCode.BAD_REQUEST)
         .json("User already exists, please try another login");
+    } else {
+      res.status(HttpStatusCode.CREATE).send(user);
     }
-
-    res.status(HttpStatusCode.CREATE).send(user);
   } catch (e) {
     res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
   }

@@ -1,7 +1,8 @@
 import { UserModel } from "./../models/user/user.model";
 import faker from "faker";
+import { GroupModel, Permission } from "../models";
 
-export function generateUserPayload() {
+export const generateUserPayload = () => {
   return {
     login: `${faker.name.firstName()}1`,
     password: `${faker.name.firstName()}${faker.random.number({
@@ -10,9 +11,9 @@ export function generateUserPayload() {
     })}`,
     age: faker.random.number({ min: 4, max: 130 }),
   };
-}
+};
 
-export function generateUserData(overide = {}): UserModel {
+export const generateUserData = (overide = {}): UserModel => {
   return {
     id: faker.random.uuid(),
     login: `${faker.name.firstName()}1`,
@@ -24,15 +25,59 @@ export function generateUserData(overide = {}): UserModel {
     isDeleted: false,
     ...overide,
   };
-}
+};
 
-export function generateUsersData(n = 1): UserModel[] {
+export const generateUsersData = (n = 1): UserModel[] => {
   return Array.from(
     {
       length: n,
     },
-    (_, i) => {
-      return generateUserData();
-    }
+    () => generateUserData()
   );
-}
+};
+
+export const generateGroupPayload = () => {
+  return {
+    name: faker.name.firstName(),
+    permissions: [Permission.READ],
+  };
+};
+
+export const generateGroupData = (overide = {}): GroupModel => {
+  return {
+    id: faker.random.uuid(),
+    name: faker.name.firstName(),
+    permissions: [Permission.READ],
+    ...overide,
+  };
+};
+
+export const generateGroupsData = (n = 1): GroupModel[] => {
+  return Array.from(
+    {
+      length: n,
+    },
+    () => generateGroupData()
+  );
+};
+
+export const generateIdUserPayload = () => {
+  return faker.random.uuid();
+};
+
+export const generateIdUsersData = (n: number): string[] => {
+  return Array.from(
+    {
+      length: n,
+    },
+    () => generateIdUserPayload()
+  );
+};
+
+export const generateUsersToGroupData = (overide = {}, n = 1) => {
+  return {
+    id: faker.random.uuid(),
+    users: generateIdUsersData(n),
+    ...overide,
+  };
+};
