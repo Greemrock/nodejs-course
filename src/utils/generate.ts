@@ -1,6 +1,8 @@
-import { UserModel } from "./../models/user/user.model";
 import faker from "faker";
-import { GroupModel, Permission } from "../models";
+import jwt from "jsonwebtoken";
+
+import { GroupModel, Permission, UserModel } from "../models";
+import { SECRET_KEY, EXPIRATION_TIME } from "../shared/constant";
 
 export const generateUserPayload = () => {
   return {
@@ -80,4 +82,11 @@ export const generateUsersToGroupData = (overide = {}, n = 1) => {
     users: generateIdUsersData(n),
     ...overide,
   };
+};
+
+export const generateToken = (id: string) => {
+  const token = jwt.sign({ id }, SECRET_KEY, {
+    expiresIn: EXPIRATION_TIME,
+  });
+  return token;
 };

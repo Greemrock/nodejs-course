@@ -1,5 +1,3 @@
-import { addUsersToGroupTest } from "./controller/group/addUsers";
-import { updateGroupTest } from "./controller/group/update";
 import { Request, Response, NextFunction } from "express";
 
 import { authMiddleware, morganMiddleware } from "../src/middlewares";
@@ -11,11 +9,14 @@ import {
   updateUserTest,
 } from "./controller/user";
 import {
+  addUsersToGroupTest,
   createGroupTest,
   deleteGroupTest,
   getAllGroupTest,
   getByIdGroupTest,
+  updateGroupTest,
 } from "./controller/group";
+import { loginTest } from "./controller/login";
 
 jest.mock("../src/middlewares/auth.middleware.ts");
 jest.mock("../src/middlewares/morgan.middleware.ts");
@@ -54,5 +55,9 @@ describe("Controller tests", () => {
     getByIdGroupTest();
     updateGroupTest();
     addUsersToGroupTest();
+  });
+
+  describe("Login controller", () => {
+    loginTest();
   });
 });
