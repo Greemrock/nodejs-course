@@ -40,5 +40,22 @@ export const updateGroupTest = () => {
       expect(spy).toHaveBeenCalledWith(groupData.id, payload);
       expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    test("should return status 500 and message", async () => {
+      const payload = generateGroupPayload();
+      const groupData = generateGroupData(payload);
+      const spy = jest
+        .spyOn(GroupService, "updateGroup")
+        .mockRejectedValueOnce(new Error("Internal error"));
+
+      const response = await request(app)
+        .put("/api/group/" + groupData.id)
+        .send(payload)
+        .expect(500);
+
+      expect(response.body).toEqual("Internal error");
+      expect(spy).toHaveBeenCalledWith(groupData.id, payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 };

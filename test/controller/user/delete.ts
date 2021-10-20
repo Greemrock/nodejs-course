@@ -37,5 +37,21 @@ export const deleteUserTest = () => {
       expect(spy).toHaveBeenCalledWith(userData.id);
       expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    test("should return status 500 and message", async () => {
+      const userData = generateUserData({ isDeleted: true });
+      const spy = jest
+        .spyOn(UserService, "deleteUser")
+        .mockRejectedValueOnce(new Error("Internal error"));
+
+      const response = await request(app)
+        .delete("/api/user/" + userData.id)
+        .send(userData.id);
+
+      expect(response.status).toEqual(500);
+      expect(response.body).toEqual("Internal error");
+      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 };

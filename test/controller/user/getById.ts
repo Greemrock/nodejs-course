@@ -56,10 +56,18 @@ export const getByIdUserTest = () => {
 
     test("should return status 500 and message", async () => {
       const userData = generateUserData();
+      const spy = jest
+        .spyOn(UserService, "getUserById")
+        .mockRejectedValueOnce(new Error("Internal error"));
 
-      const response = await request(app).get("/api/user/").send(userData.id);
+      const response = await request(app)
+        .get("/api/user/" + userData.id)
+        .send(userData.id)
+        .expect(500);
 
-      expect(response.status).toEqual(500);
+      expect(response.body).toEqual("Internal error");
+      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 };

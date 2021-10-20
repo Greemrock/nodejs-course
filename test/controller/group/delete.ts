@@ -38,5 +38,21 @@ export const deleteGroupTest = () => {
       expect(spy).toHaveBeenCalledWith(groupData.id);
       expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    test("should return status 500 and message", async () => {
+      const groupData = generateGroupData();
+      const spy = jest
+        .spyOn(GroupService, "deleteGroup")
+        .mockRejectedValueOnce(new Error("Internal error"));
+
+      const response = await request(app)
+        .delete("/api/group/" + groupData.id)
+        .send(groupData.id)
+        .expect(500);
+
+      expect(response.body).toEqual("Internal error");
+      expect(spy).toHaveBeenCalledWith(groupData.id);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 };

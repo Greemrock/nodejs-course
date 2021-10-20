@@ -36,5 +36,21 @@ export const createUserTest = () => {
       expect(spy).toHaveBeenCalledWith(payload);
       expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    test("should return status 500 and message", async () => {
+      const payload = generateUserPayload();
+      const spy = jest
+        .spyOn(UserService, "createUser")
+        .mockRejectedValueOnce(new Error("Internal error"));
+
+      const response = await request(app)
+        .post("/api/user")
+        .send(payload)
+        .expect(500);
+
+      expect(response.body).toEqual("Internal error");
+      expect(spy).toHaveBeenCalledWith(payload);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
 };
