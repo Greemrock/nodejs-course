@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { UserModel } from "../../models";
+import { UserModelPayload } from "../../models";
 import { UserService } from "../../services";
 import { DEFAULT_USER_LIMIT } from "../../shared/constant";
 import { HttpStatusCode } from "../../utils";
@@ -10,41 +10,39 @@ export const get = async (req: Request, res: Response) => {
     const { id } = req.params;
     const user = await UserService.getUserById(id);
 
-    if (!user) {
+    if (!user || user.isDeleted) {
       res.status(HttpStatusCode.NOT_FOUND).json("User not found");
-    } else if (user.isDeleted) {
-      res
-        .status(HttpStatusCode.BAD_REQUEST)
-        .json("User deleted, please try another request");
     } else {
       res.status(HttpStatusCode.OK).send(user);
     }
   } catch (e) {
-    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER);
+    res.json(e.message);
   }
 };
 
 export const getAll = async (req: Request, res: Response) => {
   try {
     const { loginSubstring, limit = DEFAULT_USER_LIMIT } = req.query;
-    const user = await UserService.getAutoSuggestUsers(
+    const users = await UserService.getAutoSuggestUsers(
       loginSubstring as string,
       limit as string
     );
 
-    if (user.length === 0) {
+    if (users.length === 0) {
       res.status(HttpStatusCode.NOT_FOUND).json("Users not found");
     } else {
-      res.status(HttpStatusCode.OK).send(user);
+      res.status(HttpStatusCode.OK).send(users);
     }
   } catch (e) {
-    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER);
+    res.json(e.message);
   }
 };
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const baseUser = req.body as UserModel;
+    const baseUser = req.body as UserModelPayload;
     const user = await UserService.createUser(baseUser);
 
     if (!user) {
@@ -55,7 +53,8 @@ export const create = async (req: Request, res: Response) => {
       res.status(HttpStatusCode.CREATE).send(user);
     }
   } catch (e) {
-    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER);
+    res.json(e.message);
   }
 };
 
@@ -71,7 +70,8 @@ export const update = async (req: Request, res: Response) => {
       res.status(HttpStatusCode.OK).json(`User updated`);
     }
   } catch (e) {
-    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER);
+    res.json(e.message);
   }
 };
 
@@ -86,6 +86,7 @@ export const remove = async (req: Request, res: Response) => {
       res.status(HttpStatusCode.OK).json("User deleted");
     }
   } catch (e) {
-    res.status(HttpStatusCode.INTERNAL_SERVER).json(e.message);
+    res.status(HttpStatusCode.INTERNAL_SERVER);
+    res.json(e.message);
   }
 };

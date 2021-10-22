@@ -1,3 +1,4 @@
+import { UserModelPayload } from "./../../models/user/user.model";
 import { getRepository, Like } from "typeorm";
 
 import { UserModel } from "../../models";
@@ -30,7 +31,7 @@ export const getAutoSuggestUsers = async (
 };
 
 export const createUser = async (
-  data: UserModel
+  data: UserModelPayload
 ): Promise<UserModel | null> => {
   const userRepository = getRepository(User);
 

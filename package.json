@@ -16,7 +16,7 @@
     "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop",
     "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync",
     "test": "jest --watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --collect-coverage"
   },
   "repository": {
     "type": "git",

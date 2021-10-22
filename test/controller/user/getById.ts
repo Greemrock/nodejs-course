@@ -1,72 +1,49 @@
-import request from "supertest";
+import { Request, Response } from "express";
 
-import { app } from "../../../src/app";
+import { UserController } from "../../../src/controllers";
 import { UserService } from "../../../src/services";
 import { generateUserData } from "../../../src/utils";
 
 export const getByIdUserTest = () => {
   describe("GET /api/user/:id - getById", () => {
-    test("should return user from the database", async () => {
-      const userData = generateUserData();
+    const userData = generateUserData();
+    const req = { params: userData.id } as unknown as Request;
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+    const error = new Error("Internal error");
+
+    test("should return status 200", async () => {
       const spy = jest
         .spyOn(UserService, "getUserById")
         .mockResolvedValueOnce(userData);
 
-      const response = await request(app)
-        .get("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.get(req, res);
 
-      expect(response.body).toEqual(userData);
-      expect(response.body.id).toBe(userData.id);
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(200);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return 404 - user not found", async () => {
-      const userData = generateUserData();
+    test("should return status 404", async () => {
       const spy = jest
         .spyOn(UserService, "getUserById")
         .mockResolvedValueOnce(null);
 
-      const response = await request(app)
-        .get("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.get(req, res);
 
-      expect(response.body).toEqual("User not found");
-      expect(response.status).toEqual(404);
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(404);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return 400 - bad request", async () => {
-      const userData = generateUserData({ isDeleted: true });
+    test("should return status 500", async () => {
       const spy = jest
         .spyOn(UserService, "getUserById")
-        .mockResolvedValueOnce(userData);
+        .mockRejectedValueOnce(error);
 
-      const response = await request(app)
-        .get("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.get(req, res);
 
-      expect(response.body).toEqual("User deleted, please try another request");
-      expect(response.status).toEqual(400);
-      expect(spy).toHaveBeenCalledWith(userData.id);
-      expect(spy).toHaveBeenCalledTimes(1);
-    });
-
-    test("should return status 500 and message", async () => {
-      const userData = generateUserData();
-      const spy = jest
-        .spyOn(UserService, "getUserById")
-        .mockRejectedValueOnce(new Error("Internal error"));
-
-      const response = await request(app)
-        .get("/api/user/" + userData.id)
-        .send(userData.id)
-        .expect(500);
-
-      expect(response.body).toEqual("Internal error");
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(500);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

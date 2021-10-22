@@ -1,39 +1,63 @@
-import request from "supertest";
+import { Request, Response } from "express";
 
-import { app } from "../../../src/app";
+import { UserController } from "../../../src/controllers";
 import { UserService } from "../../../src/services";
 import { generateUsersData } from "../../../src/utils";
 
 export const getAllUserTest = () => {
   describe("GET /api/user/ - getAll", () => {
-    test("should return status 200 and user list", async () => {
-      const usersData = generateUsersData(2);
+    const usersData = generateUsersData(2);
+    const req = {
+      query: { loginSubstring: "", limit: 10 },
+    } as unknown as Request;
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    } as unknown as Response;
+    const error = new Error("Internal error");
+
+    test("should return status 200 with query ", async () => {
       const spy = jest
         .spyOn(UserService, "getAutoSuggestUsers")
         .mockResolvedValueOnce(usersData);
-      const response = await request(app).get("/api/user/");
 
-      expect(response.body).toEqual(usersData);
-      expect(response.status).toEqual(200);
+      await UserController.getAll(req, res);
+
+      expect(res.status).toBeCalledWith(200);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return status 404 and message", async () => {
+    test("should return status 200 without query", async () => {
+      const req = { query: {} } as unknown as Request;
+      const spy = jest
+        .spyOn(UserService, "getAutoSuggestUsers")
+        .mockResolvedValueOnce(usersData);
+
+      await UserController.getAll(req, res);
+
+      expect(res.status).toBeCalledWith(200);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    test("should return status 404", async () => {
       const spy = jest
         .spyOn(UserService, "getAutoSuggestUsers")
         .mockResolvedValueOnce([]);
-      const response = await request(app).get("/api/user/");
 
-      expect(response.body).toEqual("Users not found");
-      expect(response.status).toEqual(404);
+      await UserController.getAll(req, res);
+
+      expect(res.status).toBeCalledWith(404);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return status 500 and message", async () => {
-      const spy = jest.spyOn(UserService, "getAutoSuggestUsers");
-      const response = await request(app).get("/api/user/");
+    test("should return status 500", async () => {
+      const spy = jest
+        .spyOn(UserService, "getAutoSuggestUsers")
+        .mockRejectedValueOnce(error);
 
-      expect(response.status).toEqual(500);
+      await UserController.getAll(req, res);
+
+      expect(res.status).toBeCalledWith(500);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });

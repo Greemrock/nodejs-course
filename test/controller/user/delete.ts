@@ -1,56 +1,49 @@
-import request from "supertest";
+import { Request, Response } from "express";
 
-import { app } from "../../../src/app";
 import { UserService } from "../../../src/services";
 import { generateUserData } from "../../../src/utils";
+import { UserController } from "../../../src/controllers";
 
 export const deleteUserTest = () => {
   describe("DELETE /api/user/:id - remove", () => {
-    test("should return status 200 and message", async () => {
-      const userData = generateUserData({ isDeleted: true });
+    const userData = generateUserData({ isDeleted: true });
+    const req = { params: userData.id } as unknown as Request;
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as unknown as Response;
+    const error = new Error("Internal error");
+
+    test("should return status 200", async () => {
       const spy = jest
         .spyOn(UserService, "deleteUser")
         .mockResolvedValueOnce(userData);
 
-      const response = await request(app)
-        .delete("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.remove(req, res);
 
-      expect(response.body).toEqual("User deleted");
-      expect(response.status).toEqual(200);
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(200);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return 400 and message", async () => {
-      const userData = generateUserData({ isDeleted: true });
+    test("should return status 400", async () => {
       const spy = jest
         .spyOn(UserService, "deleteUser")
         .mockResolvedValueOnce(null);
 
-      const response = await request(app)
-        .delete("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.remove(req, res);
 
-      expect(response.body).toEqual("Check id user");
-      expect(response.status).toEqual(400);
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(400);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
-    test("should return status 500 and message", async () => {
-      const userData = generateUserData({ isDeleted: true });
+    test("should return status 500", async () => {
       const spy = jest
         .spyOn(UserService, "deleteUser")
-        .mockRejectedValueOnce(new Error("Internal error"));
+        .mockRejectedValueOnce(error);
 
-      const response = await request(app)
-        .delete("/api/user/" + userData.id)
-        .send(userData.id);
+      await UserController.remove(req, res);
 
-      expect(response.status).toEqual(500);
-      expect(response.body).toEqual("Internal error");
-      expect(spy).toHaveBeenCalledWith(userData.id);
+      expect(res.status).toBeCalledWith(500);
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
