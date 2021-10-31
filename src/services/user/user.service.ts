@@ -6,12 +6,12 @@ import { User } from "../../data-access/entity";
 
 export const getUserById = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  return userRepository.findOne({ id: id });
+  return userRepository.findOne({ id });
 };
 
 export const getUserByLogin = async (login: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  return userRepository.findOne({ login: login });
+  return userRepository.findOne({ login });
 };
 
 export const getAutoSuggestUsers = async (
@@ -50,7 +50,7 @@ export const updateUser = async (
   data: UserModel
 ): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ id: id });
+  const user = await userRepository.findOne({ id });
 
   if (!user) {
     return;
@@ -61,7 +61,7 @@ export const updateUser = async (
 
 export const deleteUser = async (id: string): Promise<UserModel> => {
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne({ id: id });
+  const user = await userRepository.findOne({ id });
 
   if (!user) {
     return;

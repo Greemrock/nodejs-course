@@ -5,15 +5,14 @@ import { authMiddleware } from "../../middlewares";
 
 export const groupRouter = Router();
 
-groupRouter
-  .route("/")
-  .get(authMiddleware, GroupController.getAll)
-  .post(authMiddleware, GroupController.create);
+groupRouter.use(authMiddleware);
+
+groupRouter.route("/").get(GroupController.getAll).post(GroupController.create);
 
 groupRouter
   .route("/:id")
-  .get(authMiddleware, GroupController.get)
-  .put(authMiddleware, GroupController.update)
-  .delete(authMiddleware, GroupController.remove);
+  .get(GroupController.get)
+  .put(GroupController.update)
+  .delete(GroupController.remove);
 
-groupRouter.route("/:id/users").put(authMiddleware, GroupController.addUsers);
+groupRouter.route("/:id/users").put(GroupController.addUsers);

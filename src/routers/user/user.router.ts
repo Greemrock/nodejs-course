@@ -6,13 +6,15 @@ import { authMiddleware } from "../../middlewares/auth.middleware";
 
 export const userRouter = Router();
 
+userRouter.use(authMiddleware);
+
 userRouter
   .route("/")
-  .get(authMiddleware, UserController.getAll)
-  .post(authMiddleware, validator, UserController.create);
+  .get(UserController.getAll)
+  .post(validator, UserController.create);
 
 userRouter
   .route("/:id")
-  .get(authMiddleware, UserController.get)
-  .put(authMiddleware, validator, UserController.update)
-  .delete(authMiddleware, UserController.remove);
+  .get(UserController.get)
+  .put(validator, UserController.update)
+  .delete(UserController.remove);

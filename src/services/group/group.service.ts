@@ -5,7 +5,7 @@ import { Group, User } from "../../data-access/entity";
 
 export const getGroupById = async (id: string): Promise<GroupModel> => {
   const groupRepository = getRepository(Group);
-  return groupRepository.findOne({ id: id }, { relations: ["users"] });
+  return groupRepository.findOne({ id }, { relations: ["users"] });
 };
 
 export const getGroupAll = async (): Promise<GroupModel[]> => {
