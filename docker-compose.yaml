@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  node:
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/app/src
+      # - ./test:/app/test
+    depends_on:
+      - postgres
+    environment:
+      - PORT=${PORT}
+  postgres:
+    build: ./database
+    ports:
+      - ${PG_PORT}:${PG_PORT}
+    environment:
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USERNAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}

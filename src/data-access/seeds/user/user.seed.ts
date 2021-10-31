@@ -5,5 +5,9 @@ import { User } from "../../entity";
 export class CreateUser implements Seeder {
   public async run(factory: Factory): Promise<void> {
     await factory(User)().createMany(5);
+    await factory(User)().create({
+      login: "admin",
+      password: "admin",
+    });
   }
 }

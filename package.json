@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon ./src/server.ts",
+    "start": "nodemon --legacy-watch ./src/server.ts",
+    "docker": "npm run schema:sync && npm run seeder:run && npm start",
     "format": "prettier . --write",
     "lint": "eslint . --ext .ts --fix",
     "prepare": "husky install",
