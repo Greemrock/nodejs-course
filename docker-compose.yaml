@@ -11,6 +11,7 @@ services:
       - postgres
     environment:
       - PORT=${PORT}
+    command: "npm run schema:sync && npm run seeder:run && npm start"
   postgres:
     build: ./database
     ports:
